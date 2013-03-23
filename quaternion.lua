@@ -81,61 +81,54 @@ end
 
 -------------- WARNING MICRO OPTIMIZATION BECAUSE ITS NEEDED
 
-local vecQuat = Quaternion:new(0, 0, 0, 0)
-local conjugate = Quaternion:new(0, 0, 0, 0)
-local resQuat = Quaternion:new(0, 0, 0, 0)
-local normvec = Vector:new(0, 0, 0)
 function Quaternion:rotate(vec)
-	normvec.x, normvec.y, normvec.z, mag = vec:inlinenormal()
+	local sx, sy, sw, sz = self.x, self.y, self.w, self.z
+	local nx, ny, nz, mag = vec:inlinenormal()
 
-	vecQuat.x, vecQuat.y, vecQuat.z = normvec.x, normvec.y, normvec.z
-	conjugate.x, conjugate.y, conjugate.z, conjugate.w = -self.x, -self.y, -self.z, self.w
-	resQuat.x , resQuat.y, resQuat.z, resQuat.w = 
-						vecQuat.w * conjugate.x + vecQuat.x * conjugate.w + vecQuat.y * conjugate.z - vecQuat.z * conjugate.y,
-	                	vecQuat.w * conjugate.y + vecQuat.y * conjugate.w + vecQuat.z * conjugate.x - vecQuat.x * conjugate.z,
-	                 	vecQuat.w * conjugate.z + vecQuat.z * conjugate.w + vecQuat.x * conjugate.y - vecQuat.y * conjugate.x,
-	                 	vecQuat.w * conjugate.w - vecQuat.x * conjugate.x - vecQuat.y * conjugate.y - vecQuat.z * conjugate.z
-	resQuat.x , resQuat.y, resQuat.z, resQuat.w = 
-						self.w * resQuat.x + self.x * resQuat.w + self.y * resQuat.z - self.z * resQuat.y,
-	                	self.w * resQuat.y + self.y * resQuat.w + self.z * resQuat.x - self.x * resQuat.z,
-	                 	self.w * resQuat.z + self.z * resQuat.w + self.x * resQuat.y - self.y * resQuat.x,
-	                 	self.w * resQuat.w - self.x * resQuat.x - self.y * resQuat.y - self.z * resQuat.z
+	local cx, cy, cz, cw = -self.x, -self.y, -self.z, self.w
+	local rx, ry, rz, rw = 
+						nx * cw + ny * cz - nz * cy,
+	                	ny * cw + nz * cx - nx * cz,
+	                 	nz * cw + nx * cy - ny * cx,
+	                 	0 - nx * cx - ny * cy - nz * cz
+	rx, ry, rz = 
+			(sw * rx + sx * rw + sy * rz - sz * ry)*mag,
+	       	(sw * ry + sy * rw + sz * rx - sx * rz)*mag,
+	        (sw * rz + sz * rw + sx * ry - sy * rx)*mag
 
 	return Vector:new(resQuat.x*mag, resQuat.y*mag, resQuat.z*mag)
 end
 
 function Quaternion:inlinerotate(vec)
-	normvec.x, normvec.y, normvec.z, mag = vec:inlinenormal()
+	local sx, sy, sw, sz = self.x, self.y, self.w, self.z
+	local nx, ny, nz, mag = vec:inlinenormal()
 
-	vecQuat.x, vecQuat.y, vecQuat.z = normvec.x, normvec.y, normvec.z
-	conjugate.x, conjugate.y, conjugate.z, conjugate.w = -self.x, -self.y, -self.z, self.w
-	resQuat.x , resQuat.y, resQuat.z, resQuat.w = 
-						vecQuat.w * conjugate.x + vecQuat.x * conjugate.w + vecQuat.y * conjugate.z - vecQuat.z * conjugate.y,
-	                	vecQuat.w * conjugate.y + vecQuat.y * conjugate.w + vecQuat.z * conjugate.x - vecQuat.x * conjugate.z,
-	                 	vecQuat.w * conjugate.z + vecQuat.z * conjugate.w + vecQuat.x * conjugate.y - vecQuat.y * conjugate.x,
-	                 	vecQuat.w * conjugate.w - vecQuat.x * conjugate.x - vecQuat.y * conjugate.y - vecQuat.z * conjugate.z
-	resQuat.x , resQuat.y, resQuat.z, resQuat.w = 
-						self.w * resQuat.x + self.x * resQuat.w + self.y * resQuat.z - self.z * resQuat.y,
-	                	self.w * resQuat.y + self.y * resQuat.w + self.z * resQuat.x - self.x * resQuat.z,
-	                 	self.w * resQuat.z + self.z * resQuat.w + self.x * resQuat.y - self.y * resQuat.x,
-	                 	self.w * resQuat.w - self.x * resQuat.x - self.y * resQuat.y - self.z * resQuat.z
-	return  resQuat.x*mag, resQuat.y*mag, resQuat.z*mag
+	local cx, cy, cz, cw = -self.x, -self.y, -self.z, self.w
+	local rx, ry, rz, rw = 
+						nx * cw + ny * cz - nz * cy,
+	                	ny * cw + nz * cx - nx * cz,
+	                 	nz * cw + nx * cy - ny * cx,
+	                 	0 - nx * cx - ny * cy - nz * cz
+	
+	return	(sw * rx + sx * rw + sy * rz - sz * ry)*mag,
+	       	(sw * ry + sy * rw + sz * rx - sx * rz)*mag,
+	        (sw * rz + sz * rw + sx * ry - sy * rx)*mag
 end
 
 function Quaternion:fastrotate(vec)
-	normvec.x, normvec.y, normvec.z, mag = vec:inlinenormal()
+	local sx, sy, sw, sz = self.x, self.y, self.w, self.z
+	local nx, ny, nz, mag = vec:inlinenormal()
 
-	vecQuat.x, vecQuat.y, vecQuat.z = normvec.x, normvec.y, normvec.z
-	conjugate.x, conjugate.y, conjugate.z, conjugate.w = -self.x, -self.y, -self.z, self.w
-	resQuat.x , resQuat.y, resQuat.z, resQuat.w = 
-						vecQuat.w * conjugate.x + vecQuat.x * conjugate.w + vecQuat.y * conjugate.z - vecQuat.z * conjugate.y,
-	                	vecQuat.w * conjugate.y + vecQuat.y * conjugate.w + vecQuat.z * conjugate.x - vecQuat.x * conjugate.z,
-	                 	vecQuat.w * conjugate.z + vecQuat.z * conjugate.w + vecQuat.x * conjugate.y - vecQuat.y * conjugate.x,
-	                 	vecQuat.w * conjugate.w - vecQuat.x * conjugate.x - vecQuat.y * conjugate.y - vecQuat.z * conjugate.z
-	vec.x , vec.y, vec.z, vec.w = 
-						self.w * resQuat.x + self.x * resQuat.w + self.y * resQuat.z - self.z * resQuat.y,
-	                	self.w * resQuat.y + self.y * resQuat.w + self.z * resQuat.x - self.x * resQuat.z,
-	                 	self.w * resQuat.z + self.z * resQuat.w + self.x * resQuat.y - self.y * resQuat.x,
-	                 	self.w * resQuat.w - self.x * resQuat.x - self.y * resQuat.y - self.z * resQuat.z
+	local cx, cy, cz, cw = -self.x, -self.y, -self.z, self.w
+	local rx, ry, rz, rw = 
+						nx * cw + ny * cz - nz * cy,
+	                	ny * cw + nz * cx - nx * cz,
+	                 	nz * cw + nx * cy - ny * cx,
+	                 	0 - nx * cx - ny * cy - nz * cz
+
+	vec.x , vec.y, vec.z = 
+			(sw * rx + sx * rw + sy * rz - sz * ry)*mag,
+	       	(sw * ry + sy * rw + sz * rx - sx * rz)*mag,
+	        (sw * rz + sz * rw + sx * ry - sy * rx)*mag
 	return vec
 end
