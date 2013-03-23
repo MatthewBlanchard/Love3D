@@ -8,9 +8,9 @@ function Game:Game()
 	self.camera = Camera:new(90)
 	self.mdl = Mesh:new(spoon, Vector:new(0, 0, 4))
 
+	love.graphics.setMode(800, 600, false, false)
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
-	love.graphics.setMode(800, 600, false, false)
 end
 
 local fps, frames, ttime, ltime = 0, 0, 0, 0	-- fps, frame counter, time accumulator, last time
