@@ -6,7 +6,7 @@ Game = Object:new()
 
 function Game:Game()
 	self.camera = Camera:new(90)
-	self.mdl = Mesh:new(teapot, Vector:new(0, 0, 40))
+	self.mdl = Mesh:new(teapot, Vector(1, 0, 0), Vector:new(0, 0, 40))
 
 	love.graphics.setMode(800, 600, false, false)
 	love.mouse.setGrab(true)

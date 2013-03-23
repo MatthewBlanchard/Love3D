@@ -58,7 +58,7 @@ function Camera:draw(mdl)
 
 	for i = 1, #mdl.faces do
 		local v = mdl.faces[i]
-		
+
 		edgeo = edgeo:fastsub(nverts[v[3]], nverts[v[1]])
 		edget = edget:fastsub(nverts[v[3]], nverts[v[2]])	
 
@@ -71,7 +71,7 @@ function Camera:draw(mdl)
 		local l = math.max(tempvec:dot(lightnorm), 0)
 
 		if ang < 0 then
-			love.graphics.setColor(200*l, 30*l, 200*l)
+			love.graphics.setColor(mdl.color.x*l*255, mdl.color.y*l*255, mdl.color.z*l*255)
 			love.graphics.triangle("fill", 
 				sverts[v[1]].x, sverts[v[1]].y,
 				sverts[v[2]].x, sverts[v[2]].y,
