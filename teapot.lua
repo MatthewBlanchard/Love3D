@@ -1,4 +1,4 @@
-require "Vector"
+require "vector"
 local v = Vector
 
 teapot = {}

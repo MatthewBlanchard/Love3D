@@ -1,16 +1,17 @@
 require "vector"
+local v = Vector
 
 cube = {}
 
 cube.vertices = {
-	Vector:new(-.5, -.5,  -.5),
-	Vector:new(-.5,  -.5,  .5),
-	Vector:new(-.5,  .5,  -.5),
-	Vector:new(-.5,  .5,  .5),
-	Vector:new(.5,  -.5,  -.5),
-	Vector:new(.5,  -.5,  .5),
-	Vector:new(.5,  .5,  -.5),
-	Vector:new(.5,  .5,  .5)
+	v(-.5, -.5,  -.5),
+	v(-.5,  -.5,  .5),
+	v(-.5,  .5,  -.5),
+	v(-.5,  .5,  .5),
+	v(.5,  -.5,  -.5),
+	v(.5,  -.5,  .5),
+	v(.5,  .5,  -.5),
+	v(.5,  .5,  .5)
 }
 
 --[[vn  -.5  -.5  .5
