@@ -10,10 +10,21 @@ function Game:Game()
 
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
+	love.graphics.setMode(800, 600, false, false)
 end
 
+local fps, frames, ttime, ltime = 0, 0, 0, 0	-- fps, frame counter, time accumulator, last time
 function Game:update(dt)
-	print(1/dt)
+	-- Update fps counter twice per second.
+	-- This keeps track of the number of frames rendered in each time period.
+	local ctime = love.timer.getMicroTime()	-- current time
+	ttime = ttime + (ctime - ltime)
+	ltime = ctime
+	frames = frames + 1
+	if ttime >= 0.5 then
+		fps = math.floor(frames / ttime + 0.5)
+		frames, ttime = 0, 0
+	end
 
 	-- Movement
 	if love.keyboard.isDown("w") then
@@ -34,8 +45,12 @@ function Game:update(dt)
 	love.mouse.setPosition(hw, hh)
 end
 
+local cwhite = {0xff, 0xff, 0xff}	-- color white
 function Game:draw()
 	self.camera:draw(self.mdl)
+
+	love.graphics.setColor(cwhite)
+	love.graphics.print("FPS: " .. fps, 0, 0)
 end
 
 function Game:keypressed(key)
