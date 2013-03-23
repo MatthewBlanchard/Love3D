@@ -1,6 +1,6 @@
-Model = Object:new()
+Mesh = Object:new()
 
-function Model:Model(data, pos, ang)
+function Mesh:Mesh(data, pos, ang)
 	self.rot = ang or Quaternion(0, 0, 0, 1)
 	self.pos = pos or Vector:new(0, 0, 0)
 
@@ -8,6 +8,6 @@ function Model:Model(data, pos, ang)
 	self.faces = data.faces
 end
 
-function Model:OBJ()
+function Mesh:OBJ()
 
 end

@@ -2,61 +2,40 @@ require "quaternion"
 require "model"
 require "spoon"
 
-Scene = Object:new()
+Camera = Object:new()
 
 local hw, hh = love.graphics.getWidth()/2, love.graphics.getHeight()/2
 
-function Scene:Scene(vfov)
+function Camera:Camera(vfov)
 	self.focallen = .5/math.tan(vfov/2)
 	self.pos = Vector:new(0, 0, 0)
 	self.rot = Quaternion:fromAngle(0, 0, 0);
-	self.mdl = Model:new(spoon, Vector:new(0, 0, 4))
 
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 end
 
-function Scene:keypressed(key)
-	if key == "escape" then
-      	love.event.push("quit")
-   	end
-end
-
-function Scene:update(dt)
-	--print(1/dt)
-	local mx, my = love.mouse.getX(), love.mouse.getY()
-
-	if love.keyboard.isDown("w") then
-		self.rot:normal()
-		local move = self.rot:conjugate():rotate(Vector:new(0, 0, 1*dt))
-		print("move:\t" .. tostring(move))
-		--print("pos:\t" .. tostring(self.pos))
-		--print("rot:\t" .. tostring(self.rot))
-		self.pos = self.pos + move
-	elseif love.keyboard.isDown("s") then
-	end
-
-	self.rot = Quaternion:fromAngle(0, 0, -((mx/hw)-1))*self.rot
-	self.rot = Quaternion:fromAngle(0, ((my/hh)-1), 0)*self.rot
-
+function Camera:rotate(x, y)
+	print(x, y)
+	self.rot = Quaternion:fromAngle(0, 0, x)*self.rot
+	self.rot = Quaternion:fromAngle(0, y, 0)*self.rot
 	self.rot:normal()
-
-	self.mdl.rot = self.mdl.rot*Quaternion:fromAngle(0, 1*dt, 1*dt)
-
-	love.mouse.setPosition(hw, hh)
 end
 
-function Scene:draw()
-	self:drawmdl(self.mdl)
+function Camera:move(x, y, z)
+	self.pos = self.pos + self.rot:conjugate():rotate(Vector:new(x, y, z))
 end
+
+
+-- UGLY OPTIMIZATION ZONE BELOW
 
 local nverts, sverts = {}, {}
 
-local tempvec = Vector:new(0, 0, 0)
-local edgeo, edget, norm = Vector:new(0,0,0), Vector:new(0,0,0), Vector:new(0,0,0)
-local avg, lightvec, lightnorm = Vector:new(0, 0, 0), Vector:new(0, 0, 2), Vector:new(0, 0, 0)
+local tempvec, edgeo, edget, norm, avg, lightvec, lightnorm = Vector:new(0, 0, 0),
+	Vector:new(0, 0, 0), Vector:new(0, 0, 0), Vector:new(0, 0, 0),
+	Vector:new(0, 0, 0), Vector:new(0, 0, 2), Vector:new(0, 0, 0)
 -- Draw a model
-function Scene:drawmdl(mdl)
+function Camera:draw(mdl)
 	love.graphics.push()
 	love.graphics.translate(hw, hh)
 	love.graphics.scale(love.graphics.getWidth())
@@ -73,7 +52,9 @@ function Scene:drawmdl(mdl)
 		if not nverts[k] then nverts[k] = Vector:new() sverts[k] = {0, 0} end
 		tempvec.x, tempvec.y, tempvec.z = mrot:inlinerotate(v)
 		nverts[k].x, nverts[k].y, nverts[k].z = rot:inlinerotate(tempvec:fastadd(tempvec, mpos))
-
+		--print(rot)
+		--print(nverts[k])
+		--print(mdl.pos)
 		sverts[k].x = nverts[k].x * (flen/nverts[k].z)
 		sverts[k].y = nverts[k].y * (flen/nverts[k].z)
 
