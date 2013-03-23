@@ -41,7 +41,7 @@ function Camera:draw(mdl)
 	local mrot = mdl.rot
 	local mpos = mdl.pos-self.pos
 
-	lightvec = self.rot:rotate(Vector(0, 0, 2) + mpos)
+	lightvec = self.rot:fastrotate(Vector(0, 0, 2) + mpos)
 
 	if not nverts[mdl] then nverts[mdl] = {} sverts[mdl] = {} end
 	for i = 1, #mdl.vertices do
