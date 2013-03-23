@@ -2,8 +2,6 @@ local sqrt = math.sqrt
 
 Vector = Object:new()
 
-local sincache = {}
-
 function Vector:Vector(x, y, z)
 	self.x = x
 	self.y = y
@@ -38,22 +36,16 @@ end
 
 function Vector:normal()
 	local mag = sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
-
-	if mag == 0 then mag = 1 end
 	return Vector:new(self.x/mag, self.y/mag, self.z/mag), mag
 end
 
 function Vector:inlinenormal()
 	local mag = sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
-
-	if mag == 0 then mag = 1 end
 	return self.x/mag, self.y/mag, self.z/mag, mag
 end
 
 function Vector:fastnormal(vec)
 	local mag = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z)
-
-	if mag == 0 then mag = 1 end
 	self.x, self.y, self.z = vec.x/mag, vec.y/mag, vec.z/mag
 	return self
 end

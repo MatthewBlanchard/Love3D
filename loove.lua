@@ -42,7 +42,6 @@ function love.run()
             if love.s.draw then love.s:draw() end
         end
 
-        if love.timer then love.timer.sleep(0.001) end
         if love.graphics then love.graphics.present() end
 
     end
