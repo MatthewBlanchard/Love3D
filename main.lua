@@ -59,4 +59,4 @@ function Game:keypressed(key)
    	end
 end
 
-love.state(Game:new(math.rad(90)))
+love.state(Game:new())

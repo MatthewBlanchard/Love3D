@@ -27,9 +27,9 @@ end
 
 local nverts, sverts = {}, {}
 
-local tempvec, edgeo, edget, norm, avg, lightvec, lightnorm = Vector:new(0, 0, 0),
+local tempvec, edgeo, edget, avg, lightvec, lightnorm = Vector:new(0, 0, 0),
 	Vector:new(0, 0, 0), Vector:new(0, 0, 0), Vector:new(0, 0, 0),
-	Vector:new(0, 0, 0), Vector:new(0, 0, 2), Vector:new(0, 0, 0)
+	Vector:new(0, 0, 0), Vector:new(0, 0, 2)
 -- Draw a model
 function Camera:draw(mdl)
 	love.graphics.push()
@@ -65,16 +65,13 @@ function Camera:draw(mdl)
 		edgeo = edgeo:fastsub(nverts[mdl.faces[i][3]], nverts[mdl.faces[i][1]])
 		edget = edget:fastsub(nverts[mdl.faces[i][3]], nverts[mdl.faces[i][2]])	
 
-		norm = norm:fastcross(edgeo, edget)
-		norm = norm:fastnormal(norm)
-		local ang = nverts[mdl.faces[i][1]]:dot(norm)
+		local tempvec = tempvec:fastcross(edgeo, edget)
+		tempvec = tempvec:fastnormal(tempvec)
+		local ang = nverts[mdl.faces[i][1]]:dot(tempvec)
 
-		edgeo = edgeo:fastsub(nverts[mdl.faces[i][3]], nverts[mdl.faces[i][1]])
-		edget = edget:fastsub(nverts[mdl.faces[i][3]], nverts[mdl.faces[i][2]])
-		norm = norm:fastcross(edgeo, edget):fastnormal(norm)
-		lightnorm:fastsub(norm, lightvec)
+		lightnorm:fastsub(tempvec, lightvec)
 		lightnorm:fastnormal(lightnorm)
-		local l = math.max(norm:dot(lightnorm), 0)
+		local l = math.max(tempvec:dot(lightnorm), 0)
 
 		if ang < 0 then
 			local avg = (mdl.vertices[mdl.faces[i][1]].x + mdl.vertices[mdl.faces[i][2]].x + mdl.vertices[mdl.faces[i][3]].x)/3
