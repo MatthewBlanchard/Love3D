@@ -121,3 +121,21 @@ function Quaternion:inlinerotate(vec)
 	                 	self.w * resQuat.w - self.x * resQuat.x - self.y * resQuat.y - self.z * resQuat.z
 	return  resQuat.x*mag, resQuat.y*mag, resQuat.z*mag
 end
+
+function Quaternion:fastrotate(vec)
+	normvec.x, normvec.y, normvec.z, mag = vec:inlinenormal()
+
+	vecQuat.x, vecQuat.y, vecQuat.z = normvec.x, normvec.y, normvec.z
+	conjugate.x, conjugate.y, conjugate.z, conjugate.w = -self.x, -self.y, -self.z, self.w
+	resQuat.x , resQuat.y, resQuat.z, resQuat.w = 
+						vecQuat.w * conjugate.x + vecQuat.x * conjugate.w + vecQuat.y * conjugate.z - vecQuat.z * conjugate.y,
+	                	vecQuat.w * conjugate.y + vecQuat.y * conjugate.w + vecQuat.z * conjugate.x - vecQuat.x * conjugate.z,
+	                 	vecQuat.w * conjugate.z + vecQuat.z * conjugate.w + vecQuat.x * conjugate.y - vecQuat.y * conjugate.x,
+	                 	vecQuat.w * conjugate.w - vecQuat.x * conjugate.x - vecQuat.y * conjugate.y - vecQuat.z * conjugate.z
+	vec.x , vec.y, vec.z, vec.w = 
+						self.w * resQuat.x + self.x * resQuat.w + self.y * resQuat.z - self.z * resQuat.y,
+	                	self.w * resQuat.y + self.y * resQuat.w + self.z * resQuat.x - self.x * resQuat.z,
+	                 	self.w * resQuat.z + self.z * resQuat.w + self.x * resQuat.y - self.y * resQuat.x,
+	                 	self.w * resQuat.w - self.x * resQuat.x - self.y * resQuat.y - self.z * resQuat.z
+	return vec
+end

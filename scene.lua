@@ -9,7 +9,7 @@ local hw, hh = love.graphics.getWidth()/2, love.graphics.getHeight()/2
 function Scene:Scene(vfov)
 	self.focallen = .5/math.tan(vfov/2)
 	self.pos = Vector:new(0, 0, 0)
-	self.rot = Quaternion(0, 0, 0, 1);
+	self.rot = Quaternion:fromAngle(0, 0, 0);
 	self.mdl = Model:new(spoon, Vector:new(0, 0, 4))
 
 	love.mouse.setGrab(true)
@@ -23,13 +23,13 @@ function Scene:keypressed(key)
 end
 
 function Scene:update(dt)
-	print(1/dt)
+	--print(1/dt)
 	local mx, my = love.mouse.getX(), love.mouse.getY()
 
 	if love.keyboard.isDown("w") then
 		self.rot:normal()
-		local move = self.rot:rotate(Vector:new(0, 0, 1*dt))
-		--print("move:\t" .. tostring(move))
+		local move = self.rot:conjugate():rotate(Vector:new(0, 0, 1*dt))
+		print("move:\t" .. tostring(move))
 		--print("pos:\t" .. tostring(self.pos))
 		--print("rot:\t" .. tostring(self.rot))
 		self.pos = self.pos + move
