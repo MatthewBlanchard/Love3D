@@ -1,5 +1,5 @@
 require "quaternion"
-require "model"
+require "mesh"
 require "spoon"
 
 Camera = Object:new()
@@ -10,9 +10,6 @@ function Camera:Camera(vfov)
 	self.focallen = .5/math.tan(vfov/2)
 	self.pos = Vector:new(0, 0, 0)
 	self.rot = Quaternion:fromAngle(0, 0, 0);
-
-	love.mouse.setGrab(true)
-	love.mouse.setVisible(false)
 end
 
 function Camera:rotate(x, y)
