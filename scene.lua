@@ -22,8 +22,19 @@ function Scene:keypressed(key)
    	end
 end
 
+local fps, frames, ttime, ltime = 0, 0, 0, 0	-- fps, frame counter, time accumulator, last time
 function Scene:update(dt)
-	--print(1/dt)
+	-- Update fps counter twice per second.
+	-- This keeps track of the number of frames rendered in each time period.
+	local ctime = love.timer.getMicroTime()	-- current time
+	ttime = ttime + (ctime - ltime)
+	ltime = ctime
+	frames = frames + 1
+	if ttime >= 0.5 then
+		fps = math.floor(frames / ttime + 0.5)
+		frames, ttime = 0, 0
+	end
+
 	local mx, my = love.mouse.getX(), love.mouse.getY()
 
 	if love.keyboard.isDown("w") then
@@ -46,8 +57,12 @@ function Scene:update(dt)
 	love.mouse.setPosition(hw, hh)
 end
 
+local cwhite = {0xff, 0xff, 0xff}	-- color white
+love.graphics.setMode(800, 600, false, false)
 function Scene:draw()
 	self:drawmdl(self.mdl)
+	love.graphics.setColor(cwhite)
+	love.graphics.print("FPS: " .. fps, 0, 0)
 end
 
 local nverts, sverts = {}, {}
