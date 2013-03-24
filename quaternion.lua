@@ -96,7 +96,7 @@ function Quaternion:rotate(vec)
 	       	(sw * ry + sy * rw + sz * rx - sx * rz)*mag,
 	        (sw * rz + sz * rw + sx * ry - sy * rx)*mag
 
-	return Vector:new(resQuat.x*mag, resQuat.y*mag, resQuat.z*mag)
+	return Vector:new(rx*mag, ry*mag, rz*mag)
 end
 
 function Quaternion:inlinerotate(vec)

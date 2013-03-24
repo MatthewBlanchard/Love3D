@@ -5,7 +5,7 @@ require "teapot"
 Game = Object:new()
 
 function Game:Game()
-	self.camera = Camera:new(90)
+	self.camera = Camera:new(math.rad(90))
 	self.mdl = Mesh:new(teapot, Vector(1, 0, 0), Vector:new(0, 0, 40))
 
 	love.graphics.setMode(800, 600, false, false)
@@ -28,9 +28,11 @@ function Game:update(dt)
 
 	-- Movement
 	if love.keyboard.isDown("w") then
-		self.camera:move(0, 0, 1*dt)
+		self.camera:move(0, 0, 50*dt)
 	elseif love.keyboard.isDown("s") then
 		self.camera:move(0, 0, -1*dt)
+	elseif love.keyboard.isDown("q") then
+		self.camera:rotate(0, 0)
 	end
 
 	-- Camera
@@ -40,7 +42,7 @@ function Game:update(dt)
 		self.camera:rotate(-((mx/hw)-1), ((my/hh)-1))
 	end	
 	
-	self.mdl.rot = self.mdl.rot*Quaternion:fromAngle(0, 1*dt, 1*dt)
+	--self.mdl.rot = self.mdl.rot*Quaternion:fromAngle(0, 1*dt, 1*dt)
 
 	love.mouse.setPosition(hw, hh)
 end

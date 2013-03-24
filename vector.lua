@@ -40,7 +40,7 @@ function Vector:normal()
 end
 
 function Vector:inlinenormal()
-	local mag = sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+	local mag = math.max(sqrt(self.x * self.x + self.y * self.y + self.z * self.z), 0.00000001)
 	return self.x/mag, self.y/mag, self.z/mag, mag
 end
 

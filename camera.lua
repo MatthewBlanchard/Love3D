@@ -41,7 +41,7 @@ function Camera:draw(mdl)
 	local mrot = mdl.rot
 	local mpos = mdl.pos-self.pos
 
-	lightvec = self.rot:fastrotate(Vector(0, 0, 2) + mpos)
+	lightvec = self.rot:fastrotate(Vector(0, 0, 2) - self.pos)
 
 	if not nverts[mdl] then nverts[mdl] = {} sverts[mdl] = {} end
 	for i = 1, #mdl.vertices do
@@ -58,15 +58,20 @@ function Camera:draw(mdl)
 
 	for i = 1, #mdl.faces do
 		local v = mdl.faces[i]
+		local n1, n2, n3 = nverts[v[1]], nverts[v[2]], nverts[v[3]]
+		avg.x, avg.y, avg.z = 
+			(n1.x+n2.x+n3.x)/3,
+			(n1.y+n2.y+n3.y)/3,
+			(n1.z+n2.z+n3.z)/3
 
-		edgeo = edgeo:fastsub(nverts[v[3]], nverts[v[1]])
-		edget = edget:fastsub(nverts[v[3]], nverts[v[2]])	
+		edgeo = edgeo:fastsub(n3, n1)
+		edget = edget:fastsub(n3, n2)	
 
 		local tempvec = tempvec:fastcross(edgeo, edget)
-		tempvec = tempvec:fastnormal(tempvec)
-		local ang = nverts[v[1]]:dot(tempvec)
+		tempvec:fastnormal(tempvec)
+		local ang = n1:dot(tempvec)
 
-		lightnorm:fastsub(tempvec, lightvec)
+		lightnorm:fastsub(lightvec, avg)
 		lightnorm:fastnormal(lightnorm)
 		local l = math.max(tempvec:dot(lightnorm), 0)
 
