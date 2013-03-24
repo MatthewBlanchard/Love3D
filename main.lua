@@ -1,12 +1,12 @@
 require "loove"
 require "camera"
-require "teapot"
+require "monkey"
 
 Game = Object:new()
 
 function Game:Game()
 	self.camera = Camera:new(math.rad(74))
-	self.mdl = Mesh:new(teapot, Vector(1, 0, 0), Vector:new(0, 0, 40))
+	self.mdl = Mesh:new(monkey, Vector(1, 0, 0), Vector:new(0, 0, 4))
 
 	love.graphics.setMode(800, 600, false, false)
 	love.mouse.setGrab(true)
@@ -28,13 +28,13 @@ function Game:update(dt)
 
 	-- Movement
 	if love.keyboard.isDown("w") then
-		self.camera:move(0, 0, 50*dt)
+		self.camera:move(0, 0, 25*dt)
 	elseif love.keyboard.isDown("s") then
-		self.camera:move(0, 0, -50*dt)
+		self.camera:move(0, 0, -25*dt)
 	elseif love.keyboard.isDown("a") then
-		self.camera:move(-50*dt, 0, 0)
+		self.camera:move(-13*dt, 0, 0)
 	elseif love.keyboard.isDown("d") then
-		self.camera:move(50*dt, 0, 0)
+		self.camera:move(13*dt, 0, 0)
 	end
 
 	-- Camera
@@ -51,7 +51,7 @@ end
 
 local cwhite = {0xff, 0xff, 0xff}	-- color white
 function Game:draw()
-	self.camera:draw(self.mdl)
+	self.camera:drawsorted(self.mdl)
 
 	love.graphics.setColor(cwhite)
 	love.graphics.print("FPS: " .. fps, 0, 0)
