@@ -8,7 +8,3 @@ function Mesh:Mesh(data, color, pos, ang)
 	self.vertices = data.vertices
 	self.faces = data.faces
 end
-
-function Mesh:OBJ()
-
-end
