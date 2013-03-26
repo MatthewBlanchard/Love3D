@@ -77,4 +77,7 @@ function Vector:transform(vec)
 	return Vector:new(x, y, z)
 end
 
-Vector.zero = Vector:new(0, 0, 0)
+function VectorNormal(vec)
+	local mag = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z)
+	vec.x, vec.y, vec.z = vec.x/mag, vec.y/mag, vec.z/mag
+end

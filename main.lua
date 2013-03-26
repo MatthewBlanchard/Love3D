@@ -1,60 +1,34 @@
 require "loove"
 require "camera"
+require "fps"
+require "controller"
 require "monkey"
 
 Game = Object:new()
 
 function Game:Game()
 	self.camera = Camera:new(math.rad(74))
-	self.mdl = Mesh:new(monkey, Vector(1, 0, 0), Vector:new(0, 0, 4))
+	self.controller = Controller:new(self.camera)
+
+	self.fps = FPS:new()
+	self.mdl = Mesh:new(monkey, Vector(1, 0, 0))
+	self.mdl:setPos(Vector(0, 0, 4))
 
 	love.graphics.setMode(800, 600, false, false)
 	love.mouse.setGrab(true)
 	love.mouse.setVisible(false)
 end
 
-local fps, frames, ttime, ltime = 0, 0, 0, 0	-- fps, frame counter, time accumulator, last time
 function Game:update(dt)
-	-- Update fps counter twice per second.
-	-- This keeps track of the number of frames rendered in each time period.
-	local ctime = love.timer.getMicroTime()	-- current time
-	ttime = ttime + (ctime - ltime)
-	ltime = ctime
-	frames = frames + 1
-	if ttime >= 0.5 then
-		fps = math.floor(frames / ttime + 0.5)
-		frames, ttime = 0, 0
-	end
+	self.fps:update(dt)
+	self.controller:update(dt)
 
-	-- Movement
-	if love.keyboard.isDown("w") then
-		self.camera:move(0, 0, 25*dt)
-	elseif love.keyboard.isDown("s") then
-		self.camera:move(0, 0, -25*dt)
-	elseif love.keyboard.isDown("a") then
-		self.camera:move(-13*dt, 0, 0)
-	elseif love.keyboard.isDown("d") then
-		self.camera:move(13*dt, 0, 0)
-	end
-
-	-- Camera
-	local mx, my = love.mouse.getX(), love.mouse.getY()
-	local hw, hh = love.graphics.getWidth()/2, love.graphics.getHeight()/2
-	if not (mx/hw == 0 and my/hh == 0) then
-		self.camera:rotate(-((mx/hw)-1), ((my/hh)-1))
-	end	
-	
-	self.mdl.rot = self.mdl.rot*Quaternion:fromAngle(0, 1*dt, 1*dt)
-
-	love.mouse.setPosition(hw, hh)
+	self.mdl:rotate(0, 1*dt, 1*dt)
 end
 
-local cwhite = {0xff, 0xff, 0xff}	-- color white
 function Game:draw()
 	self.camera:drawsorted(self.mdl)
-
-	love.graphics.setColor(cwhite)
-	love.graphics.print("FPS: " .. fps, 0, 0)
+	self.fps:draw()
 end
 
 function Game:keypressed(key)

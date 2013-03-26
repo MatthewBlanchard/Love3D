@@ -52,7 +52,7 @@ function Object:new(...)
         o[v] = self:__metamethod(v)
     end
     
-    err = o:__init(...)
+    local err = o:__init(...)
     return err or o
 end
 
