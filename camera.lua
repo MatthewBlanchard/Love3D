@@ -1,7 +1,8 @@
+require "entity"
 require "quaternion"
 require "mesh"
 
-Camera = Object:new()
+Camera = Entity:new()
 
 local hw, hh = love.graphics.getWidth()/2, love.graphics.getHeight()/2
 
@@ -9,16 +10,6 @@ function Camera:Camera(vfov)
 	self.focallen = .5/math.tan(vfov/2)
 	self.pos = Vector:new(0, 0, 0)
 	self.rot = Quaternion:fromAngle(0, 0, 0);
-end
-
-function Camera:rotate(x, y)
-	self.rot = Quaternion:fromAngle(0, 0, x)*self.rot
-	self.rot = Quaternion:fromAngle(0, y, 0)*self.rot
-	self.rot:normal()
-end
-
-function Camera:move(x, y, z)
-	self.pos = self.pos + self.rot:conjugate():rotate(Vector:new(x, y, z))
 end
 
 
