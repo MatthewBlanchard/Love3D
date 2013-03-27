@@ -11,7 +11,7 @@ function Mesh.load(file)
     return mesh()
 end
 
-function Mesh.OBJ(str)
+function Mesh.OBJ(str, color)
 	local verts, faces = {}, {}
 
 	-- Replace quads with triangles.
@@ -26,7 +26,6 @@ function Mesh.OBJ(str)
 	for x, y, z in string.gfind(str, "f%s+(%d+)%A-%s+(%d+)%A-%s+(%d+)") do
      	table.insert(faces,  {tonumber(x), tonumber(y), tonumber(z)})
     end
-    print(#faces)
 
-    return verts, faces
+    return Mesh:new(verts, faces, color)
 end

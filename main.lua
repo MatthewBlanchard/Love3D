@@ -13,8 +13,7 @@ function Game:Game()
 	self.controller = Controller:new(self.camera)
 
 	-- Set up monkey head
-	local verts, faces = Mesh.OBJ(monkey)
-	self.mdl = Mesh:new(verts, faces, Vector(1, 0, 0))
+	self.mdl = Mesh.OBJ(monkey, Vector(1, 0, 0))
 	self.mdl:setPos(Vector(0, 0, 4))
 
 	love.graphics.setMode(800, 600, false, false)
