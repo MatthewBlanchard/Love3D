@@ -34,7 +34,6 @@ function Camera:draw(mdl)
 
 	lightvec = self.rot:fastrotate(Vector(0, 0, 2) - self.pos)
 
-	if not nverts[mdl] then nverts[mdl] = {} sverts[mdl] = {} end
 	for i = 1, #mdl.vertices do
 		if not nverts[i] then nverts[i] = Vector:new() sverts[i] = {0, 0} end
 		local nv = nverts[i]
@@ -118,7 +117,10 @@ function Camera:drawsorted(mdl)
 	depth[#mdl.faces+1] = nil
 	for i = 1, #mdl.faces do
 		local v = mdl.faces[i]
-		local n1, n2, n3 = nverts[v[1]], nverts[v[2]], nverts[v[3]]
+		local v1 = v[1]
+
+		n1, n2, n3 = nverts[v1], nverts[v[2]], nverts[v[3]]
+
 		avg.x, avg.y, avg.z = 
 			(n1.x+n2.x+n3.x)/3,
 			(n1.y+n2.y+n3.y)/3,

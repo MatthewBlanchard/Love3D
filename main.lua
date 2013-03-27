@@ -2,16 +2,19 @@ require "loove"
 require "camera"
 require "fps"
 require "controller"
-require "monkey"
+
+local monkey = require "monkey"
 
 Game = Object:new()
 
 function Game:Game()
+	self.fps = FPS:new()
 	self.camera = Camera:new(math.rad(74))
 	self.controller = Controller:new(self.camera)
 
-	self.fps = FPS:new()
-	self.mdl = Mesh:new(monkey, Vector(1, 0, 0))
+	-- Set up monkey head
+	local verts, faces = Mesh.OBJ(monkey)
+	self.mdl = Mesh:new(verts, faces, Vector(1, 0, 0))
 	self.mdl:setPos(Vector(0, 0, 4))
 
 	love.graphics.setMode(800, 600, false, false)
