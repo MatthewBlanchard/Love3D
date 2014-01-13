@@ -1,4 +1,5 @@
-require "loove"
+require "./Object/object"
+require "./lOOve/loove"
 require "camera"
 require "fps"
 require "controller"
@@ -16,8 +17,8 @@ function Game:Game()
 	self.mdl = Mesh.OBJ(monkey, Vector(1, 0, 0))
 	self.mdl:setPos(Vector(0, 0, 4))
 
-	love.graphics.setMode(800, 600, false, false)
-	love.mouse.setGrab(true)
+	love.window.setMode(800, 600)
+	love.mouse.setGrabbed(true)
 	love.mouse.setVisible(false)
 end
 

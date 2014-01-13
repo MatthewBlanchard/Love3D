@@ -5,7 +5,7 @@ FPS.frames = 0
 
 local totaltime, lasttime = 0, 0
 function FPS:update()
-	local time = love.timer.getMicroTime()
+	local time = love.timer.getTime()
 
 	totaltime = totaltime + (time - lasttime)
 	lasttime = time

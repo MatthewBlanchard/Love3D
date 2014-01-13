@@ -1,0 +1,6 @@
+[submodule "Object"]
+	path = Object
+	url = git@github.com:MatthewBlanchard/Object.git
+[submodule "lOOve"]
+	path = lOOve
+	url = git@github.com:MatthewBlanchard/lOOve.git

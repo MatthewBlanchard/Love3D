@@ -150,11 +150,14 @@ function Camera:drawsorted(mdl)
 
 		lightnorm:fastsub(lightvec, avg)
 		lightnorm:fastnormal(lightnorm)
-		local l = math.max(tempvec:dot(lightnorm), 0)
+		local l = math.max(tempvec:dot(lightnorm), 0) + .2
 
 		if ang < 0 then
-			love.graphics.setColor(mdl.color.x*l*255, mdl.color.y*l*255, mdl.color.z*l*255)
-			love.graphics.triangle("fill", 
+			love.graphics.setColor(	math.min(mdl.color.x*l*255, 255),
+									math.min(mdl.color.y*l*255, 255),
+									math.min(mdl.color.z*l*255, 255) )
+
+			love.graphics.polygon("fill", 
 				sverts[v[1]].x, sverts[v[1]].y,
 				sverts[v[2]].x, sverts[v[2]].y,
 				sverts[v[3]].x, sverts[v[3]].y
