@@ -144,13 +144,13 @@ function Camera:drawsorted(mdl)
 		edgeo = edgeo:fastsub(n3, n1)
 		edget = edget:fastsub(n3, n2)	
 
-		local tempvec = tempvec:fastcross(edgeo, edget)
+		tempvec:fastcross(edgeo, edget)
 		tempvec:fastnormal(tempvec)
 		local ang = n1:dot(tempvec)
 
 		lightnorm:fastsub(lightvec, avg)
 		lightnorm:fastnormal(lightnorm)
-		local l = math.max(tempvec:dot(lightnorm), 0) + .2
+		local l = math.min(math.max(tempvec:dot(lightnorm), 0) + .2, 1)
 
 		if ang < 0 then
 			love.graphics.setColor(	math.min(mdl.color.x*l*255, 255),
